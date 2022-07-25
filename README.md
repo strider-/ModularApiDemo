@@ -20,15 +20,15 @@ from [Tim Deschryver](https://timdeschryver.dev/).
 ```
 API
  ├── Modules/               // All modules should be under here
- │   └── Todos/             // The 'Todo' module root
- │       ├── Endpoints/     // Each endpoint for the module is its own class here
- │       ├── Models/        // Domain model and DTOs
- │       ├── Services/      // Interfaces w/ implementations
- │       └── TodoModule.cs  // Registers all services w/ DI
- │   IModule.cs             // Modules implement need to implement this interface
- │ Extensions.cs            // DI registration for modules, validation middlware
- │ Program.cs               
- │ ImplicitValidation.cs    // Validates incoming request models automatically
+ │   ├── Todos/             // The 'Todo' module root
+ │   │   ├── Endpoints/     // Each endpoint for the module is its own class here
+ │   │   ├── Models/        // Domain model and DTOs
+ │   │   ├── Services/      // Interfaces w/ implementations
+ │   │   └── TodoModule.cs  // Registers all module services w/ DI
+ │   └── IModule.cs         // Modules implement need to implement this interface
+ ├── Extensions.cs          // DI registration for modules, validation middlware
+ ├── Program.cs               
+ └── ImplicitValidation.cs  // Validates incoming request models automatically
 ```
 While domain models and service implementations are in this project for the demo, in a more rubust application they would probably exist elsewhere.
 
