@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModuleDemo.Api", "ModuleDemo\ModuleDemo.Api.csproj", "{0BC63EFB-6B1C-4A28-8F50-00A317E8C1C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModuleDemo.Api", "ModuleDemo.Api\ModuleDemo.Api.csproj", "{0BC63EFB-6B1C-4A28-8F50-00A317E8C1C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModuleDemo.Tests", "ModuleDemo.Tests\ModuleDemo.Tests.csproj", "{68F3D8C3-2812-4449-8831-B9966334EBC1}"
 EndProject
