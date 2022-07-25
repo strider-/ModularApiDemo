@@ -1,6 +1,6 @@
 # .NET 6 Module-Based Minimal API Demo
 
-An example of a API taking a module-based architecture approach, using endpoint based routing in .NET 6. Inspired by these [blog](https://timdeschryver.dev/blog/maybe-its-time-to-rethink-our-project-structure-with-dot-net-6) [posts](https://timdeschryver.dev/blog/the-simplicity-of-net-endpoints) 
+An example of a API taking a module-based architecture approach, using the [minimal APIs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-6.0) / endpoint based routing in .NET 6. Inspired by these [blog](https://timdeschryver.dev/blog/maybe-its-time-to-rethink-our-project-structure-with-dot-net-6) [posts](https://timdeschryver.dev/blog/the-simplicity-of-net-endpoints) 
 from [Tim Deschryver](https://timdeschryver.dev/).
 
 ----------
