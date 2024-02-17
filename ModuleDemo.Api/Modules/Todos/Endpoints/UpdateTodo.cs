@@ -13,7 +13,6 @@ public class UpdateTodo : IEndpoint<IResult, int, UpdateTodoRequest, ITodoServic
             .ValidateRequestBody()
             .Produces<Todo>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .ProducesValidationProblem()
             .WithDisplayName(nameof(UpdateTodo))
             .WithOpenApi(
                 summary: "Updates a todo item",

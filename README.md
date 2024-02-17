@@ -27,9 +27,9 @@ API
  │   │   ├── Services/      // Interfaces w/ implementations
  │   │   └── TodoModule.cs  // Registers all module services w/ DI
  │   └── IModule.cs         // Modules need to implement this interface
- ├── Extensions.cs          // DI registration for modules, validation middleware
+ ├── Extensions.cs          // DI registration for modules, router builder extensions
  ├── Program.cs             
- └── ImplicitValidation.cs  // Validates incoming request models automatically
+ └── FluentValidationFilter.cs  // Endpoint filter for validating request bodies
 ```
 While domain models and service implementations are in this project for the demo, in a more rubust application they would probably exist elsewhere.
 

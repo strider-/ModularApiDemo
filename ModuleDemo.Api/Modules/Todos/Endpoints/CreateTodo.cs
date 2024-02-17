@@ -12,7 +12,6 @@ public class CreateTodo : IEndpoint<IResult, CreateTodoRequest, LinkGenerator, I
             .MapPost("api/todos", HandleAsync)
             .ValidateRequestBody()
             .Produces<Todo>(StatusCodes.Status201Created)
-            .ProducesValidationProblem()
             .WithDisplayName(nameof(CreateTodo))
             .WithOpenApi(
                 summary: "Creates a new todo item",

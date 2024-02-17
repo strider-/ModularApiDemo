@@ -59,12 +59,14 @@ public static class RouteHandlerBuilderExtensions
 
     /// <summary>
     /// Validates the request body for this endpoint. Request body model must have an IValidator implementation
-    /// defined for validation to occur.
+    /// defined for validation to occur. Includes a call to ProducesValidationProblem for OpenApi metadata.
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
     public static RouteHandlerBuilder ValidateRequestBody(this RouteHandlerBuilder builder)
     {
-        return builder.AddEndpointFilter<FluentValidationFilter>();
+        return builder
+            .AddEndpointFilter<FluentValidationFilter>()
+            .ProducesValidationProblem();
     }
 }
