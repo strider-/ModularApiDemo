@@ -47,6 +47,7 @@ public static class ApplicationBuilderExtensions
     public static IApplicationBuilder UseImplicitValidation(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<ImplicitValidation>();
+
     }
 }
     

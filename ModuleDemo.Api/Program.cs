@@ -1,3 +1,4 @@
+using FluentValidation;
 using MinimalApi.Endpoint.Extensions;
 using ModuleDemo;
 
@@ -7,6 +8,7 @@ builder.Services
     .AddEndpoints()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(x => x.EnableAnnotations())
+    .AddValidatorsFromAssemblyContaining<Program>()
     .RegisterModules();
 
 var app = builder.Build();
