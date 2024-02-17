@@ -89,6 +89,6 @@ public static class EndpointRouteBuilderExtensions
             string pattern,
             Delegate handler)
     {
-        return endpoints.MapMethods(pattern, new[] { HttpMethods.Patch }, handler);
+        return endpoints.MapMethods(pattern, [HttpMethods.Patch], handler);
     }
 }

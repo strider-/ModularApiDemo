@@ -5,14 +5,10 @@ using System.Net;
 namespace ModuleDemo.Tests.Api;
 
 [Trait("Api", "Todo")]
-public class TodoEndpointTests : IClassFixture<WebApplicationFactory<ModuleDemoApi>>
+public class TodoEndpointTests(WebApplicationFactory<ModuleDemoApi> app) 
+    : IClassFixture<WebApplicationFactory<ModuleDemoApi>>
 {
-    private readonly HttpClient _client;
-
-    public TodoEndpointTests(WebApplicationFactory<ModuleDemoApi> app)
-    {
-        _client = app.CreateClient();
-    }
+    private readonly HttpClient _client = app.CreateClient();
 
     [Fact]
     public async Task GetAllTodos_Is_Successful()

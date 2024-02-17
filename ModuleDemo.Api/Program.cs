@@ -21,7 +21,10 @@ app.UseImplicitValidation();
 
 app.Run();
 
-/// <summary>
-/// Only used as the generic argument for WebApplicationFactory in tests.
-/// </summary>
-public class ModuleDemoApi { }
+namespace ModuleDemo
+{
+    /// <summary>
+    /// Only used as the generic argument for WebApplicationFactory in tests.
+    /// </summary>
+    public class ModuleDemoApi { }
+}

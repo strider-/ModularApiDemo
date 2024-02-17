@@ -5,8 +5,8 @@ namespace ModuleDemo.Modules.Todos.Services;
 
 public class TodoService : ITodoService
 {
-    private static ConcurrentBag<Todo> Store = new ConcurrentBag<Todo>();
-    private static object _padLock = new object();
+    private static ConcurrentBag<Todo> Store = [];
+    private static readonly object _padLock = new();
 
     public Task<Todo> Create(string title, string description)
     {
@@ -35,7 +35,7 @@ public class TodoService : ITodoService
                 return Task.FromResult((Todo?)null);
             }
 
-            Store = new ConcurrentBag<Todo>(Store.Except(new[] { todo }));
+            Store = new ConcurrentBag<Todo>(Store.Except([todo]));
 
             return Task.FromResult((Todo?)todo);
         }
@@ -72,9 +72,9 @@ public class TodoService : ITodoService
     {
         lock (_padLock)
         {
-            return Store.Any()
-                ? Store.Max(x => x.Id) + 1
-                : 1;
+            return Store.IsEmpty
+                ? 1
+                : Store.Max(x => x.Id) + 1;
         }
     }
 }

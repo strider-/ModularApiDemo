@@ -6,14 +6,12 @@ using Microsoft.Extensions.Options;
 
 namespace ModuleDemo;
 
-public class ImplicitValidation
+public class ImplicitValidation(RequestDelegate next)
 {
-    private static Type ValidatorType = typeof(IValidator<>);
-    private static Type ValidationContextType = typeof(ValidationContext<>);
+    private static readonly Type ValidatorType = typeof(IValidator<>);
+    private static readonly Type ValidationContextType = typeof(ValidationContext<>);
 
-    private readonly RequestDelegate _next;
-
-    public ImplicitValidation(RequestDelegate next) => _next = next;
+    private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(HttpContext context, IOptions<JsonOptions> jsonOptions)
     {
@@ -69,7 +67,7 @@ public class ImplicitValidation
     private async Task<ValidationResult> ValidateRequestModelAsync(IValidator validator, Type modelType, object? model)
     {
         var vcType = ValidationContextType.MakeGenericType(modelType);
-        var vcInst = Activator.CreateInstance(vcType, new[] { model }) as IValidationContext;
+        var vcInst = Activator.CreateInstance(vcType, [model]) as IValidationContext;
 
         return await validator.ValidateAsync(vcInst);
     }
