@@ -73,22 +73,3 @@ public static class RouteHandlerBuilderExtensions
             .WithMetadata(new SwaggerOperationAttribute(summary, description));
     }
 }
-
-public static class EndpointRouteBuilderExtensions
-{
-    /// <summary>
-    /// Adds a <see cref="RouteEndpoint"/> to the <see cref="IEndpointRouteBuilder"/> that matches HTTP PATCH requests
-    /// for the specified pattern.
-    /// </summary>
-    /// <param name="endpoints">The <see cref="IEndpointRouteBuilder"/> to add the route to.</param>
-    /// <param name="pattern">The route pattern.</param>
-    /// <param name="handler">The <see cref="Delegate" /> executed when the endpoint is matched.</param>
-    /// <returns>A <see cref="RouteHandlerBuilder"/> that can be used to further customize the endpoint.</returns>
-    public static RouteHandlerBuilder MapPatch(
-            this IEndpointRouteBuilder endpoints,
-            string pattern,
-            Delegate handler)
-    {
-        return endpoints.MapMethods(pattern, [HttpMethods.Patch], handler);
-    }
-}
