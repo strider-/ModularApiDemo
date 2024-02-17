@@ -9,8 +9,8 @@ public class UpdateTodo : IEndpoint<IResult, int, UpdateTodoRequest, ITodoServic
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app
-            .MapPatch("api/todo/{id}", HandleAsync)
-            .ValidateRequestBody()
+            .MapPatch("{id}", HandleAsync)
+            .ProducesValidationProblem()
             .Produces<Todo>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithDisplayName(nameof(UpdateTodo))

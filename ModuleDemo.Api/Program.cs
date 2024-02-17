@@ -1,6 +1,7 @@
 using FluentValidation;
 using MinimalApi.Endpoint.Extensions;
 using ModuleDemo;
+using ModuleDemo.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,12 @@ var app = builder.Build();
 
 app.UseSwaggerUI();
 app.UseSwagger();
-app.MapEndpoints();
+app.MapEndpoints(global =>
+{
+    return global
+        .AddEndpointFilter<FluentValidationFilter>()
+        .MapGroup("api");
+});
 app.UseHttpsRedirection();
 
 app.Run();

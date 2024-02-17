@@ -9,8 +9,8 @@ public class CreateTodo : IEndpoint<IResult, CreateTodoRequest, LinkGenerator, I
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app
-            .MapPost("api/todos", HandleAsync)
-            .ValidateRequestBody()
+            .MapPost(string.Empty, HandleAsync)
+            .ProducesValidationProblem()
             .Produces<Todo>(StatusCodes.Status201Created)
             .WithDisplayName(nameof(CreateTodo))
             .WithOpenApi(

@@ -9,7 +9,7 @@ public class DeleteTodo : IEndpoint<IResult, int, ITodoService>
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app
-            .MapDelete("api/todo/{id}", HandleAsync)
+            .MapDelete("{id}", HandleAsync)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithDisplayName(nameof(DeleteTodo))

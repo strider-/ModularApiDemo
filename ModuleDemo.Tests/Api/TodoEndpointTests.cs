@@ -40,14 +40,14 @@ public class TodoEndpointTests(WebApplicationFactory<ModuleDemoApi> app)
         var response = await _client.PostAsync("/api/todos", content);
 
         response.Headers.Location.Should().NotBeNull();
-        response.Headers.Location!.OriginalString.Should().MatchRegex("^/api/todo/\\d+$");
+        response.Headers.Location!.OriginalString.Should().MatchRegex("^/api/todos/\\d+$");
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
 
     [Fact]
     public async Task GetTodo_Returns_Not_Found()
     {
-        var response = await _client.GetAsync("/api/todo/1337");
+        var response = await _client.GetAsync("/api/todos/1337");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -65,7 +65,7 @@ public class TodoEndpointTests(WebApplicationFactory<ModuleDemoApi> app)
     [Fact]
     public async Task CompleteTodo_Returns_Not_Found()
     {
-        var response = await _client.PutAsync("/api/todo/31337/done", null);
+        var response = await _client.PutAsync("/api/todos/31337/done", null);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -83,7 +83,7 @@ public class TodoEndpointTests(WebApplicationFactory<ModuleDemoApi> app)
     [Fact]
     public async Task DeleteTodo_Returns_Not_Found()
     {
-        var response = await _client.DeleteAsync("/api/todo/42069");
+        var response = await _client.DeleteAsync("/api/todos/42069");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }

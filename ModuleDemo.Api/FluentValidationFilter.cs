@@ -51,6 +51,7 @@ public class FluentValidationFilter : IEndpointFilter
         // valid model, keep the request pipeline going.
         return await next(context);
     }
+
     private IValidator? GetValidator(HttpContext context, Type modelType)
     {
         var validatorType = ValidatorType.MakeGenericType(modelType);

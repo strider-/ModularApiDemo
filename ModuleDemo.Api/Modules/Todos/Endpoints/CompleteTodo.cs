@@ -9,7 +9,7 @@ public class CompleteTodo : IEndpoint<IResult, int, ITodoService>
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app
-            .MapPut("api/todo/{id}/done", HandleAsync)
+            .MapPut("{id}/done", HandleAsync)
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .WithDisplayName(nameof(CompleteTodo))

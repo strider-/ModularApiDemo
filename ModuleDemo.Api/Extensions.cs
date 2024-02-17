@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using ModuleDemo.Api;
+using MinimalApi.Endpoint;
 using ModuleDemo.Modules;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -16,25 +16,41 @@ public static class ModuleExtensions
     /// <returns></returns>
     public static IServiceCollection RegisterModules(this IServiceCollection services)
     {
-        var modules = DiscoverModules();
-
-        foreach (var module in modules)
+        foreach (var module in ModuleDiscovery.Modules.Value)
         {
             module.RegisterModule(services);
         }
 
         return services;
     }
+}
 
-    private static IEnumerable<IModule> DiscoverModules()
+public static class IEndpointRouteBuilderExtensions
+{
+    /// <summary>
+    /// Registers all <see cref="IEndpoint"/> implentations, with optional configuration of a <see cref="RouteGroupBuilder"/> that 
+    /// will apply to all endpoints
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <param name="globalGroupConfig"></param>
+    public static void MapEndpoints(this WebApplication builder, Func<RouteGroupBuilder, RouteGroupBuilder>? globalGroupConfig = null)
     {
-        return typeof(IModule).Assembly
-            .GetTypes()
-            .Where(p => p.IsClass && p.IsAssignableTo(typeof(IModule)))
-            .Select(Activator.CreateInstance)
-            .Cast<IModule>();
+        var globalGroup = builder.MapGroup(string.Empty);
+        globalGroup = globalGroupConfig?.Invoke(globalGroup) ?? globalGroup;
+
+        using var scope = builder.Services.CreateScope();
+
+        var endpoints = scope.ServiceProvider.GetServices<IEndpoint>();
+
+        foreach (var endpoint in endpoints)
+        {
+            var module = ModuleDiscovery.GetModuleByEndpoint(endpoint);
+            var moduleGroup = module.MapRouteGroup(globalGroup);
+
+            endpoint.AddRoute(moduleGroup);
+        }
     }
-}   
+}
 
 public static class RouteHandlerBuilderExtensions
 {
@@ -56,17 +72,21 @@ public static class RouteHandlerBuilderExtensions
             .WithTags(tags)
             .WithMetadata(new SwaggerOperationAttribute(summary, description));
     }
+}
 
-    /// <summary>
-    /// Validates the request body for this endpoint. Request body model must have an IValidator implementation
-    /// defined for validation to occur. Includes a call to ProducesValidationProblem for OpenApi metadata.
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <returns></returns>
-    public static RouteHandlerBuilder ValidateRequestBody(this RouteHandlerBuilder builder)
+file static class ModuleDiscovery
+{
+    public static readonly Lazy<IEnumerable<IModule>> Modules = new Lazy<IEnumerable<IModule>>(DiscoverModules);
+
+    private static IEnumerable<IModule> DiscoverModules()
     {
-        return builder
-            .AddEndpointFilter<FluentValidationFilter>()
-            .ProducesValidationProblem();
+        return typeof(IModule).Assembly
+            .GetTypes()
+            .Where(t => t.IsClass && t.IsAssignableTo(typeof(IModule)))
+            .Select(Activator.CreateInstance)
+            .Cast<IModule>();
     }
+
+    public static IModule GetModuleByEndpoint(IEndpoint endpoint) => 
+        Modules.Value.Single(m => m.Endpoints.Contains(endpoint.GetType()));
 }

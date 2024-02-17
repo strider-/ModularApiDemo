@@ -9,7 +9,7 @@ public class GetAllTodos : IEndpoint<IResult, ITodoService>
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app
-            .MapGet("api/todos", HandleAsync)
+            .MapGet(string.Empty, HandleAsync)
             .Produces<Todo[]>()
             .WithDisplayName(nameof(GetAllTodos))
             .WithOpenApi(

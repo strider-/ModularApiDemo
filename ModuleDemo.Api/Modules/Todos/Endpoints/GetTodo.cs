@@ -11,7 +11,7 @@ public class GetTodo : IEndpoint<IResult, int, ITodoService>
     public void AddRoute(IEndpointRouteBuilder app)
     {
         app
-            .MapGet("api/todo/{id}", HandleAsync)
+            .MapGet("{id}", HandleAsync)
             .Produces<Todo>()
             .Produces(StatusCodes.Status404NotFound)
             .WithName(Name)
