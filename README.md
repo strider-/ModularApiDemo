@@ -7,14 +7,15 @@ from [Tim Deschryver](https://timdeschryver.dev/).
 
 ## Technology Stack
 ### API Project
-* .NET 6 / C# 10
-* [FluentValidation](https://docs.fluentvalidation.net/) v11.1.0
-* [MinimalApi.Endpoint](https://github.com/michelcedric/StructuredMinimalApi) v1.2.0
-* [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) w/ [Annotations](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#additional-packages) v6.4.0
+* .NET 8 / C# 12
+* [FluentValidation](https://docs.fluentvalidation.net/) v11.9.0
+* [FluentValidation.DependencyInjectionExtensions](https://docs.fluentvalidation.net/) v11.9.0
+* [MinimalApi.Endpoint](https://github.com/michelcedric/StructuredMinimalApi) v1.3.0
+* [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) w/ [Annotations](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#additional-packages) v6.5.0
 ### Tests Project
-* [xUnit](https://xunit.net/) v2.4.1
-* [FluentAssertions](https://fluentassertions.com/) v6.7.0
-* Microsoft.AspNetCore.Mvc.Testing 6.0.7
+* [xUnit](https://xunit.net/) v2.7.0
+* [FluentAssertions](https://fluentassertions.com/) v6.12.0
+* Microsoft.AspNetCore.Mvc.Testing 8.0.2
 
 ## Project Structure
 ```
