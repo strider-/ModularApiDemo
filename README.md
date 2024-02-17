@@ -8,8 +8,7 @@ from [Tim Deschryver](https://timdeschryver.dev/).
 ## Technology Stack
 ### API Project
 * .NET 8 / C# 12
-* [FluentValidation](https://docs.fluentvalidation.net/) v11.9.0
-* [FluentValidation.DependencyInjectionExtensions](https://docs.fluentvalidation.net/) v11.9.0
+* [FluentValidation](https://docs.fluentvalidation.net/) w/ DependencyInjectionExtensions v11.9.0
 * [MinimalApi.Endpoint](https://github.com/michelcedric/StructuredMinimalApi) v1.3.0
 * [Swagger](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) w/ [Annotations](https://github.com/domaindrivendev/Swashbuckle.AspNetCore#additional-packages) v6.5.0
 ### Tests Project
