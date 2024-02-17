@@ -10,6 +10,7 @@ public class UpdateTodo : IEndpoint<IResult, int, UpdateTodoRequest, ITodoServic
     {
         app
             .MapPatch("api/todo/{id}", HandleAsync)
+            .ValidateRequestBody()
             .Produces<Todo>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .ProducesValidationProblem()

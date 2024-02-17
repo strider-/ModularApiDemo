@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ModuleDemo.Api;
 using ModuleDemo.Modules;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -33,24 +34,7 @@ public static class ModuleExtensions
             .Select(Activator.CreateInstance)
             .Cast<IModule>();
     }
-}
-
-public static class ApplicationBuilderExtensions
-{
-    /// <summary>
-    /// When the incoming request model has an <see cref="IValidator{T}"/> registered in the DI container, 
-    /// it will automatically be validated. A request with a valid model will move on to its handler, and 
-    /// a request with an invalid model will generate a problem detail response to the client without invoking its handler.
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <returns></returns>
-    public static IApplicationBuilder UseImplicitValidation(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<ImplicitValidation>();
-
-    }
-}
-    
+}   
 
 public static class RouteHandlerBuilderExtensions
 {
@@ -71,5 +55,16 @@ public static class RouteHandlerBuilderExtensions
         return builder
             .WithTags(tags)
             .WithMetadata(new SwaggerOperationAttribute(summary, description));
+    }
+
+    /// <summary>
+    /// Validates the request body for this endpoint. Request body model must have an IValidator implementation
+    /// defined for validation to occur.
+    /// </summary>
+    /// <param name="builder"></param>
+    /// <returns></returns>
+    public static RouteHandlerBuilder ValidateRequestBody(this RouteHandlerBuilder builder)
+    {
+        return builder.AddEndpointFilter<FluentValidationFilter>();
     }
 }

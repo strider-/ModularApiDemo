@@ -17,7 +17,6 @@ app.UseSwaggerUI();
 app.UseSwagger();
 app.MapEndpoints();
 app.UseHttpsRedirection();
-app.UseImplicitValidation();
 
 app.Run();
 
