@@ -4,6 +4,7 @@ using ModuleDemo.Modules.Todos.Services;
 
 namespace ModuleDemo.Modules.Todos.Endpoints;
 
+[Module<TodosModule>]
 public class GetTodo : IEndpoint<IResult, int, ITodoService>
 {
     public const string Name = nameof(GetTodo);

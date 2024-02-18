@@ -2,7 +2,13 @@
 
 public interface IModule
 {
-    void Register(IServiceCollection services, EndpointCollection endpoints);
+    void Register(IServiceCollection services);
 
     RouteGroupBuilder MapRouteGroup(RouteGroupBuilder global) => global;
+}
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+public class ModuleAttribute<T> : Attribute where T : IModule
+{
+    public Type ModuleType => typeof(T);
 }

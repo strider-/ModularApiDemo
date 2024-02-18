@@ -4,6 +4,7 @@ using ModuleDemo.Modules.Todos.Services;
 
 namespace ModuleDemo.Modules.Todos.Endpoints;
 
+[Module<TodosModule>]
 public class CreateTodo : IEndpoint<IResult, CreateTodoRequest, LinkGenerator, ITodoService>
 {
     public void AddRoute(IEndpointRouteBuilder app)

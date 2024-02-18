@@ -2,6 +2,7 @@
 using MinimalApi.Endpoint;
 using ModuleDemo.Modules;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Reflection;
 
 namespace ModuleDemo;
 
@@ -18,7 +19,7 @@ public static class ModuleExtensions
     {
         foreach (var module in ModuleDiscovery.GetModules())
         {
-            module.Register(services, new EndpointCollection(module));
+            module.Register(services);
         }
 
         return services;
@@ -45,6 +46,7 @@ public static class IEndpointRouteBuilderExtensions
         foreach (var endpoint in endpoints)
         {
             var module = ModuleDiscovery.GetModuleByEndpoint(endpoint);
+
             var moduleGroup = module.MapRouteGroup(globalGroup);
 
             endpoint.AddRoute(moduleGroup);
@@ -76,37 +78,28 @@ public static class RouteHandlerBuilderExtensions
 
 file static class ModuleDiscovery
 {
-    private static readonly Lazy<IEnumerable<IModule>> Modules = new(DiscoverModules);
+    private static readonly Lazy<IEnumerable<ModuleInfo>> Modules = new(DiscoverModules);
 
-    private static readonly List<Pair> Pairs = [];
+    public static IEnumerable<IModule> GetModules() => Modules.Value.Select(m => m.Module);
 
-    private static IEnumerable<IModule> DiscoverModules()
+    public static IModule GetModuleByEndpoint(IEndpoint endpoint)
+    {
+        var moduleType = endpoint.GetType()
+            .GetCustomAttribute(typeof(ModuleAttribute<>))!
+            .GetType()
+            .GetGenericArguments()
+            .Single();
+
+        return Modules.Value.Single(mi => mi.Type == moduleType).Module;
+    }
+
+    private static IEnumerable<ModuleInfo> DiscoverModules()
     {
         return typeof(IModule).Assembly
             .GetTypes()
             .Where(t => t.IsClass && t.IsAssignableTo(typeof(IModule)))
-            .Select(Activator.CreateInstance)
-            .Cast<IModule>();
+            .Select(t => new ModuleInfo((IModule)Activator.CreateInstance(t)!, t));
     }
 
-    public static IEnumerable<IModule> GetModules() => Modules.Value;
-
-    public static void AssignEndpointToModule(IModule module, Type endpointType) =>
-        Pairs.Add(new Pair(module, endpointType));
-
-    public static IModule GetModuleByEndpoint(IEndpoint endpoint) =>
-        Pairs.Single(p => p.EndpointType == endpoint.GetType()).Module;
-
-    record Pair(IModule Module, Type EndpointType);
-}
-
-public class EndpointCollection(IModule module)
-{
-    private IModule Module { get; } = module;
-
-    public EndpointCollection Add<T>() where T : IEndpoint
-    {
-        ModuleDiscovery.AssignEndpointToModule(Module, typeof(T));
-        return this;
-    }
+    record ModuleInfo(IModule Module, Type Type);
 }
