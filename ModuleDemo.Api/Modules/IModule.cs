@@ -2,9 +2,7 @@
 
 public interface IModule
 {
-    IServiceCollection RegisterModule(IServiceCollection services);
+    void Register(IServiceCollection services, EndpointCollection endpoints);
 
     RouteGroupBuilder MapRouteGroup(RouteGroupBuilder global) => global;
-
-    IEnumerable<Type> Endpoints { get; }
 }

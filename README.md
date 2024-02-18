@@ -24,7 +24,7 @@ API
  │   │   ├── Endpoints/     // Each endpoint for the module is its own class here
  │   │   ├── Models/        // Domain model and DTOs
  │   │   ├── Services/      // Interfaces w/ implementations
- │   │   └── TodoModule.cs  // Registers all module services w/ DI
+ │   │   └── TodoModule.cs  // Registers all module services, endpoints and routing
  │   └── IModule.cs         // Modules need to implement this interface
  ├── Extensions.cs          // DI registration for modules, router builder extensions
  ├── Program.cs             

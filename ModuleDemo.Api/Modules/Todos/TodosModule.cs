@@ -5,22 +5,19 @@ namespace ModuleDemo.Modules.Todos;
 
 public class TodosModule : IModule
 {
-    public IServiceCollection RegisterModule(IServiceCollection services)
-    {
-        services.AddScoped<ITodoService, TodoService>();
-        
-        return services;
-    }
-
     public RouteGroupBuilder MapRouteGroup(RouteGroupBuilder global) =>
         global.MapGroup("todos");
 
-    public IEnumerable<Type> Endpoints => [
-        typeof(CompleteTodo),
-        typeof(CreateTodo),
-        typeof(DeleteTodo),
-        typeof(GetAllTodos),
-        typeof(GetTodo),
-        typeof(UpdateTodo)
-    ];
+    public void Register(IServiceCollection services, EndpointCollection endpoints)
+    {
+        services.AddScoped<ITodoService, TodoService>();
+
+        endpoints
+            .Add<CompleteTodo>()
+            .Add<CreateTodo>()
+            .Add<DeleteTodo>()
+            .Add<GetAllTodos>()
+            .Add<GetTodo>()
+            .Add<UpdateTodo>();
+    }
 }

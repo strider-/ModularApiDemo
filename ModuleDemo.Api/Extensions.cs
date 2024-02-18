@@ -9,16 +9,16 @@ public static class ModuleExtensions
 {
     /// <summary>
     /// Every implmentation of <see cref="IModule"/> will be discovered and have its 
-    /// <see cref="IModule.RegisterModule(IServiceCollection)"/> method invoked with the
+    /// <see cref="IModule.Register(IServiceCollection)"/> method invoked with the
     /// <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
     public static IServiceCollection RegisterModules(this IServiceCollection services)
     {
-        foreach (var module in ModuleDiscovery.Modules.Value)
+        foreach (var module in ModuleDiscovery.GetModules())
         {
-            module.RegisterModule(services);
+            module.Register(services, new EndpointCollection(module));
         }
 
         return services;
@@ -63,9 +63,9 @@ public static class RouteHandlerBuilderExtensions
     /// <param name="tags"></param>
     /// <returns></returns>
     public static RouteHandlerBuilder WithOpenApi(
-        this RouteHandlerBuilder builder, 
-        string? summary = null, 
-        string? description = null, 
+        this RouteHandlerBuilder builder,
+        string? summary = null,
+        string? description = null,
         params string[] tags)
     {
         return builder
@@ -76,7 +76,9 @@ public static class RouteHandlerBuilderExtensions
 
 file static class ModuleDiscovery
 {
-    public static readonly Lazy<IEnumerable<IModule>> Modules = new Lazy<IEnumerable<IModule>>(DiscoverModules);
+    private static readonly Lazy<IEnumerable<IModule>> Modules = new(DiscoverModules);
+
+    private static readonly List<Pair> Pairs = [];
 
     private static IEnumerable<IModule> DiscoverModules()
     {
@@ -87,6 +89,24 @@ file static class ModuleDiscovery
             .Cast<IModule>();
     }
 
-    public static IModule GetModuleByEndpoint(IEndpoint endpoint) => 
-        Modules.Value.Single(m => m.Endpoints.Contains(endpoint.GetType()));
+    public static IEnumerable<IModule> GetModules() => Modules.Value;
+
+    public static void AssignEndpointToModule(IModule module, Type endpointType) =>
+        Pairs.Add(new Pair(module, endpointType));
+
+    public static IModule GetModuleByEndpoint(IEndpoint endpoint) =>
+        Pairs.Single(p => p.EndpointType == endpoint.GetType()).Module;
+
+    record Pair(IModule Module, Type EndpointType);
+}
+
+public class EndpointCollection(IModule module)
+{
+    private IModule Module { get; } = module;
+
+    public EndpointCollection Add<T>() where T : IEndpoint
+    {
+        ModuleDiscovery.AssignEndpointToModule(Module, typeof(T));
+        return this;
+    }
 }
