@@ -27,9 +27,9 @@ public class CompleteTodo : IEndpoint<IResult, int, ITodoService>
 
         if(todo == null)
         {
-            return Results.NotFound();
+            return TypedResults.NotFound();
         }
 
-        return Results.NoContent();
+        return TypedResults.NoContent();
     }
 }

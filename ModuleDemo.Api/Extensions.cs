@@ -51,6 +51,8 @@ public static class IEndpointRouteBuilderExtensions
 
             endpoint.AddRoute(moduleGroup);
         }
+
+        ModuleDiscovery.Complete();
     }
 }
 
@@ -78,9 +80,11 @@ public static class RouteHandlerBuilderExtensions
 
 file static class ModuleDiscovery
 {
-    private static readonly Lazy<IEnumerable<ModuleInfo>> Modules = new(DiscoverModules);
+    private static Lazy<IEnumerable<ModuleInfo>> Modules = new(DiscoverModules);
 
     public static IEnumerable<IModule> GetModules() => Modules.Value.Select(m => m.Module);
+
+    public static void Complete() => Modules = new();
 
     public static IModule GetModuleByEndpoint(IEndpoint endpoint)
     {

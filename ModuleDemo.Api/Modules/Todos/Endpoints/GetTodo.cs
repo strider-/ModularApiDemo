@@ -29,9 +29,9 @@ public class GetTodo : IEndpoint<IResult, int, ITodoService>
         var result = await service.GetTodo(id);
         if(result == null)
         {
-            return Results.NotFound();
+            return TypedResults.NotFound();
         }
 
-        return Results.Ok(result);
+        return TypedResults.Ok(result);
     }
 }

@@ -24,6 +24,6 @@ public class GetAllTodos : IEndpoint<IResult, ITodoService>
     {
         var result = await service.GetAllTodos();
 
-        return Results.Ok(result);
+        return TypedResults.Ok(result);
     }
 }

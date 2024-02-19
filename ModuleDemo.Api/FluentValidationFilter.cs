@@ -84,6 +84,6 @@ public class FluentValidationFilter : IEndpointFilter
                     g => g.Select(x => x.ErrorMessage).ToArray()
                 );
 
-        return Results.ValidationProblem(errors);
+        return TypedResults.ValidationProblem(errors);
     }
 }

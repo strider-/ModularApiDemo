@@ -33,9 +33,9 @@ public class UpdateTodo : IEndpoint<IResult, int, UpdateTodoRequest, ITodoServic
 
         if(todo == null)
         {
-            return Results.NotFound();
+            return TypedResults.NotFound();
         }
 
-        return Results.Ok(todo);
+        return TypedResults.Ok(todo);
     }
 }

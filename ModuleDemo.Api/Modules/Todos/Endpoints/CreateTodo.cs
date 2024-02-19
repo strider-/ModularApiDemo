@@ -26,6 +26,6 @@ public class CreateTodo : IEndpoint<IResult, CreateTodoRequest, LinkGenerator, I
         var result = await service.Create(request.Title, request.Description);
         var resultUrl = linker.GetPathByName(GetTodo.Name, new { id = result.Id });
 
-        return Results.Created(resultUrl!, result);
+        return TypedResults.Created(resultUrl!, result);
     }
 }

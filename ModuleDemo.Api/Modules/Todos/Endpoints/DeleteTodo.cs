@@ -26,9 +26,9 @@ public class DeleteTodo : IEndpoint<IResult, int, ITodoService>
         var result = await service.DeleteTodo(id);
         if(result == null)
         {
-            return Results.NotFound();
+            return TypedResults.NotFound();
         }
 
-        return Results.NoContent();
+        return TypedResults.NoContent();
     }
 }
