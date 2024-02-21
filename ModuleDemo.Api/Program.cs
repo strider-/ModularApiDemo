@@ -14,11 +14,11 @@ builder.Services
 
 var app = builder.Build();
 
-app.UseSwaggerUI();
 app.UseSwagger();
-app.MapEndpoints(global =>
+app.UseSwaggerUI();
+app.MapEndpoints(root =>
 {
-    return global
+    return root
         .AddEndpointFilter<FluentValidationFilter>()
         .MapGroup("api");
 });

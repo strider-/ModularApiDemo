@@ -2,6 +2,7 @@
 using MinimalApi.Endpoint;
 using ModuleDemo.Modules;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Immutable;
 using System.Reflection;
 
 namespace ModuleDemo;
@@ -17,7 +18,7 @@ public static class ModuleExtensions
     /// <returns></returns>
     public static IServiceCollection RegisterModules(this IServiceCollection services)
     {
-        foreach (var module in ModuleDiscovery.GetModules())
+        foreach (var module in MetadataDiscovery.GetModules())
         {
             module.Register(services);
         }
@@ -43,16 +44,21 @@ public static class IEndpointRouteBuilderExtensions
 
         var endpoints = scope.ServiceProvider.GetServices<IEndpoint>();
 
+        var map = new Dictionary<IModule, RouteGroupBuilder>();
         foreach (var endpoint in endpoints)
         {
-            var module = ModuleDiscovery.GetModuleByEndpoint(endpoint);
-
-            var moduleGroup = module.MapRouteGroup(globalGroup);
+            var module = MetadataDiscovery.GetEndpointModule(endpoint);
+            
+            if (!map.TryGetValue(module, out var moduleGroup))
+            {
+                moduleGroup = module.MapRouteGroup(globalGroup);
+                map[module] = moduleGroup;
+            }
 
             endpoint.AddRoute(moduleGroup);
         }
 
-        ModuleDiscovery.Complete();
+        MetadataDiscovery.Complete();
     }
 }
 
@@ -78,32 +84,40 @@ public static class RouteHandlerBuilderExtensions
     }
 }
 
-file static class ModuleDiscovery
+file static class MetadataDiscovery
 {
-    private static Lazy<IEnumerable<ModuleInfo>> Modules = new(DiscoverModules);
+    private static Lazy<IEnumerable<Metadata>> Modules = new(DiscoverModulesWithEndpoints);
 
     public static IEnumerable<IModule> GetModules() => Modules.Value.Select(m => m.Module);
 
     public static void Complete() => Modules = new();
 
-    public static IModule GetModuleByEndpoint(IEndpoint endpoint)
-    {
-        var moduleType = endpoint.GetType()
-            .GetCustomAttribute(typeof(ModuleAttribute<>))!
-            .GetType()
-            .GetGenericArguments()
-            .Single();
+    public static IModule GetEndpointModule(IEndpoint endpoint) =>
+        Modules.Value.Single(m => m.EndpointTypes.Contains(endpoint.GetType())).Module;
 
-        return Modules.Value.Single(mi => mi.Type == moduleType).Module;
-    }
-
-    private static IEnumerable<ModuleInfo> DiscoverModules()
+    private static IEnumerable<Metadata> DiscoverModulesWithEndpoints()
     {
         return typeof(IModule).Assembly
             .GetTypes()
-            .Where(t => t.IsClass && t.IsAssignableTo(typeof(IModule)))
-            .Select(t => new ModuleInfo((IModule)Activator.CreateInstance(t)!, t));
+            .Where(t => t.IsAssignableTo(typeof(IEndpoint)))
+            .Select(ep => new
+            {
+                EndpointType = ep,
+                ModuleType = ep.GetCustomAttribute(typeof(ModuleAttribute<>))?
+                            .GetType()
+                            .GetGenericArguments()
+                            .Single()
+                            ??
+                            throw new Exception($"{ep.FullName} is missing a Module attribute declaration")
+            })
+            .GroupBy(x => x.ModuleType)
+            .Select(g => new Metadata
+            (
+                (IModule)Activator.CreateInstance(g.Key)!,
+                g.Select(x => x.EndpointType).ToImmutableArray()
+            ))
+            .ToImmutableArray();
     }
 
-    record ModuleInfo(IModule Module, Type Type);
+    record Metadata(IModule Module, IEnumerable<Type> EndpointTypes);
 }
