@@ -10,6 +10,7 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen(x => x.EnableAnnotations())
     .AddValidatorsFromAssemblyContaining<Program>()
+    .AddProblemDetails()
     .RegisterModules();
 
 var app = builder.Build();
@@ -23,6 +24,9 @@ app.MapEndpoints(root =>
         .MapGroup("api");
 });
 app.UseHttpsRedirection();
+app.UseExceptionHandler(app => 
+    app.Run(UncaughtExceptionHandler.Handle)
+);
 
 app.Run();
 

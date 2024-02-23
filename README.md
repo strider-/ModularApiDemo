@@ -24,13 +24,16 @@ API
  │   │   ├── Endpoints/     // Each endpoint for the module is its own class here
  │   │   ├── Models/        // Domain model and DTOs
  │   │   ├── Services/      // Interfaces w/ implementations
- │   │   └── TodoModule.cs  // Registers all module services, endpoints and routing
+ │   │   └── TodoModule.cs  // Registers all module services and routing
  │   └── IModule.cs         // Modules need to implement this interface
  ├── Extensions.cs          // DI registration for modules, router builder extensions
  ├── Program.cs             
- └── FluentValidationFilter.cs  // Endpoint filter for validating request bodies
+ ├── FluentValidationFilter.cs  // Endpoint filter for validating request bodies
+ └── UncaughtExceptionFilter.cs // Endpoint filter for handling uncaught exceptions
 ```
 While domain models and service implementations are in this project for the demo, in a more rubust application they would probably exist elsewhere.
+
+Endpoint classes need to be decorated with the `ModuleAtribute` attribute (i.e. `Module<TodoModule>`) in order to be registered.
 
 ## Getting Started
 Just clone the project and run it, no configuration / external dependencies needed. 
