@@ -5,8 +5,8 @@ using System.Net;
 namespace ModuleDemo.Tests.Api;
 
 [Trait("Api", "Todo")]
-public class TodoEndpointTests(WebApplicationFactory<ModuleDemoApi> app) 
-    : IClassFixture<WebApplicationFactory<ModuleDemoApi>>
+public class TodoEndpointTests(WebApplicationFactory<Program> app) 
+    : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client = app.CreateClient();
 

@@ -36,7 +36,7 @@ public class FluentValidationFilter : IEndpointFilter
         if (validator == null)
         {
             // no registered IValidator<T> for the model
-            return await next(context);         
+            return await next(context);
         }
 
         var model = context.Arguments.SingleOrDefault(arg => arg?.GetType() == requestType);

@@ -48,7 +48,7 @@ public static class IEndpointRouteBuilderExtensions
         foreach (var endpoint in endpoints)
         {
             var module = MetadataDiscovery.GetEndpointModule(endpoint);
-            
+
             if (!map.TryGetValue(module, out var moduleGroup))
             {
                 moduleGroup = module.MapRouteGroup(globalGroup);

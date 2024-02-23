@@ -26,10 +26,4 @@ app.UseHttpsRedirection();
 
 app.Run();
 
-namespace ModuleDemo
-{
-    /// <summary>
-    /// Only used as the generic argument for WebApplicationFactory in tests.
-    /// </summary>
-    public class ModuleDemoApi { }
-}
+public partial class Program { }
