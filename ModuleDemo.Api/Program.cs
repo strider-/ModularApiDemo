@@ -24,9 +24,7 @@ app.MapEndpoints(root =>
         .MapGroup("api");
 });
 app.UseHttpsRedirection();
-app.UseExceptionHandler(app => 
-    app.Run(UncaughtExceptionHandler.Handle)
-);
+app.UseUncaughtExceptionHandler();
 
 app.Run();
 

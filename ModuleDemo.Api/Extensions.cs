@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Diagnostics;
 using MinimalApi.Endpoint;
 using ModuleDemo.Modules;
 using Swashbuckle.AspNetCore.Annotations;
@@ -82,6 +83,29 @@ public static class RouteHandlerBuilderExtensions
             .WithTags(tags)
             .WithMetadata(new SwaggerOperationAttribute(summary, description));
     }
+}
+
+public static class ApplicationBuilderExtensions
+{
+    public static IApplicationBuilder UseUncaughtExceptionHandler(this IApplicationBuilder builder)
+    {
+        return builder.UseExceptionHandler(app =>
+            app.Run(async (ctx) =>
+            {
+                var exceptionDetails = ctx.Features.Get<IExceptionHandlerFeature>();
+                var statusCode = 500;
+                var title = "An unexpected error occurred while processing your request";
+
+                if (exceptionDetails?.Error is BadHttpRequestException br)
+                {
+                    statusCode = br.StatusCode;
+                    title = br.InnerException?.Message ?? br.Message;
+                }
+
+                await TypedResults.Problem(statusCode: statusCode, title: title).ExecuteAsync(ctx);
+            })
+        );
+    } 
 }
 
 file static class MetadataDiscovery
